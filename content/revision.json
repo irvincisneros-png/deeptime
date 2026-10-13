@@ -25,7 +25,7 @@
     "superposition",
     "relative-dating"
    ],
-   "q": "In a cliff of flat layers, where is the youngest layer?",
+   "q": "In a cliff of undisturbed, flat layers, where is the youngest layer?",
    "options": [
     "At the bottom",
     "At the top",
@@ -263,7 +263,7 @@
     "superposition",
     "relative-dating"
    ],
-   "q": "Which is a clue that a layer is upside down?",
+   "q": "Sand and gravel beds are usually graded: the coarse grains settle first. Which is a clue that such a bed is upside down?",
    "options": [
     "The layer is very thick",
     "The layer contains fossils",
@@ -271,7 +271,7 @@
     "The layer is sandstone"
    ],
    "answer": 2,
-   "why": "Coarse grains settle first, so they mark the original bottom of a layer (graded bedding)."
+   "why": "In a normally graded bed coarse grains mark the original bottom, so coarse grains at the top suggest the bed has been overturned. Geologists check several clues, because some beds are not graded."
   },
   {
    "id": "dt017",
@@ -297,7 +297,7 @@
     "superposition",
     "relative-dating"
    ],
-   "q": "Fossils of the same kind are found in a layer near the bottom of one cliff only. What does this suggest?",
+   "q": "Fossils of one kind are found only in a layer near the bottom of an undisturbed cliff. What does this suggest?",
    "options": [
     "That organism lived most recently",
     "That organism is still alive today",
@@ -348,7 +348,7 @@
     "superposition",
     "relative-dating"
    ],
-   "q": "A dyke cuts through layers 1 to 4 but not layer 5 on top. Which is true?",
+   "q": "A dyke cuts through layers 1 to 4. Later the land was worn flat and layer 5 was laid down across the top of the dyke. Which is true?",
    "options": [
     "The dyke is older than all the layers",
     "The dyke is younger than all the layers",
@@ -356,7 +356,7 @@
     "The dyke is younger than layers 1 to 4 and older than layer 5"
    ],
    "answer": 3,
-   "why": "Cross-cutting relationships: a rock that cuts others is younger than them."
+   "why": "Cross-cutting: the dyke is younger than the layers it cuts. Layer 5 was deposited on the worn surface across it, so it is younger than the dyke."
   },
   {
    "id": "dt022",

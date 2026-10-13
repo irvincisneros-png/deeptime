@@ -101,4 +101,38 @@ t("periods", () => {
   assert.equal(periodAt(10).name, "Cenozoic");
 });
 
+t("eroded rock does not reappear after a later overturn", () => {
+  const S = createStrata({ seed: 11 });
+  S.deposit("river", { grow: false, thickness: 2 }); const b = S.deposit("deepSea", { grow: false, thickness: 2 });
+  S.erode(2); S.tilt(180);
+  for (let y = BOTTOM + 0.05; y < S.top; y += 0.1) assert.notEqual(S.classify(0, y).unit, b.id);
+});
+
+t("repeated tilts add up: three 60° tilts overturn the stack", () => {
+  const S = createStrata({ seed: 12 });
+  for (let i = 0; i < 4; i++) S.deposit("river", { grow: false, thickness: 2 });
+  S.tilt(45); S.tilt(45); S.tilt(45);
+  assert.ok(S.layers().filter((u) => S.column(0).some((r) => r.unit === u.id)).every((u) => S.isOverturned(u.id)));
+});
+
+t("fossils respect their age ranges", async () => {
+  const { RANGES } = await import("../assets/js/world/levels/strataModel.js");
+  for (let s = 1; s < 60; s++) {
+    const S = createStrata({ seed: s });
+    for (let i = 0; i < 8; i++) S.deposit(["shallowSea", "river", "swamp", "deepSea"][i % 4], { grow: false });
+    for (const u of S.layers()) for (const f of u.fossils) { const r = RANGES[f.type]; if (r) assert.ok(u.ma <= r[0] && u.ma >= r[1], `${f.type} at ${u.ma}`); }
+  }
+});
+
+t("dyke frac is distance from the centre over half-width (matches the shader)", () => {
+  const S = createStrata({ seed: 13 });
+  S.deposit("river", { grow: false, thickness: 2 });
+  S.intrude(0, 0, 1);
+  assert.ok(Math.abs(S.classify(0.25, 0.5).frac - 0.5) < 1e-9);
+});
+
+t("overturned challenge cliffs use only graded beds", () => {
+  for (let s = 1; s < 20; s++) for (const u of makeCliff("overturned", s).layers()) assert.ok(["sandstone", "conglomerate", "tuff"].includes(u.rock));
+});
+
 console.log(`strataModel: ${n} tests passed`);

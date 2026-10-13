@@ -15,6 +15,7 @@ export function makeUniforms() {
     uEvB: { value: Array.from({ length: NE }, () => new THREE.Vector4()) },
     uUnitA: { value: Array.from({ length: NU }, () => new THREE.Vector4()) },
     uUnitTint: { value: Array.from({ length: NU }, () => new THREE.Vector3(1, 1, 1)) },
+    uTop: { value: 0 },
     uHover: { value: -1 },
     uSel: { value: -1 },
     uTime: { value: 0 },
@@ -32,7 +33,7 @@ uniform vec4 uEvB[${NE}];
 uniform vec4 uUnitA[${NU}];
 uniform vec3 uUnitTint[${NU}];
 uniform float uDone[${NU}];
-uniform float uHover, uSel, uTime, uBump, uWet;
+uniform float uTop, uHover, uSel, uTime, uBump, uWet;
 varying vec3 vWP;
 varying vec3 vWN;
 float sPx = 0.01;   // metres per pixel at this fragment
@@ -58,10 +59,13 @@ vec3 vor(vec3 p){
 }
 
 // history backwards: which unit is this present-day point in, and where was it when that rock formed?
+// B.z = the land surface just before the event (−1e9: unchanged); points above the surface at that time map to unit 0
 void classify(vec2 p, out float unit, out vec2 q, out float frac){
   q = p; unit = 0.0; frac = 0.0;
+  float ceil = uTop;
   for (int i = ${NE - 1}; i >= 0; i--){
     if (i >= uNEv) continue;
+    if (q.y > ceil + 1e-4) return;
     float ty = uEvT[i]; vec4 A = uEvA[i]; vec4 B = uEvB[i];
     if (ty < 0.5){                       // deposit: A = (unit, base, t, full)
       if (A.z > 0.0 && q.y >= A.y && q.y <= A.y + A.z){ unit = A.x; frac = (q.y - A.y) / A.w; return; }
@@ -71,6 +75,7 @@ void classify(vec2 p, out float unit, out vec2 q, out float frac){
       float dist = abs((q.x - A.x) * A.z - q.y * A.y);
       if (dist < A.w && q.y <= B.y){ unit = B.x; frac = dist / A.w; return; }
     }
+    if (B.z > -1e8) ceil = B.z;
   }
 }
 
@@ -124,7 +129,7 @@ vec3 limestone(vec3 p, float fr, float sd, out float h, out float rough){
   return c;
 }
 vec3 conglomerate(vec3 p, float fr, float sd, out float h, out float rough){
-  float sc = mix(3.4, 8.5, clamp(fr, 0.0, 1.0));                        // big pebbles at the base, smaller up the bed
+  float sc = mix(2.6, 12.0, smoothstep(0.0, 0.8, fr));                 // big pebbles at the base, smaller up the bed
   vec3 v = vor(p * sc + sd * 5.0);
   float inside = smoothstep(0.43, 0.36, v.x);
   float k = v.z;
@@ -231,16 +236,18 @@ export function strataMaterial(U) {
         float sH, sRough;
         sPx = max(1e-4, length(fwidth(vWP)));
         vec3 rc = rockColor(int(UA.x + 0.5), vec3(sQ, vWP.z), sFrac, UA.y, sH, sRough) * uUnitTint[ui];
-        // graded base: coarse grains and small pebbles settle first, so every bed (not coal) has a speckled base that fines upwards.
-        // This is the way-up clue on overturned cliffs.
+        // graded base: in these beds (river sand, flood gravel, ash fall) coarse grains settle first, so each bed fines upwards.
+        // This normal grading is the way-up clue on overturned cliffs. Mud, lime and coal beds are drawn ungraded.
         int rid = int(UA.x + 0.5);
-        if (rid >= 1 && rid <= 9 && rid != 5 && rid != 7) {
-          float gb = 1.0 - smoothstep(0.0, 0.22, sFrac);
-          vec3 gv = vor(vec3(sQ, vWP.z) * 13.0 + UA.y * 9.0);
-          float grit = gb * smoothstep(0.34, 0.24, gv.x) * step(0.35, gv.z);
-          rc = mix(rc, mix(vec3(0.86, 0.84, 0.8), vec3(0.3, 0.28, 0.27), step(0.7, gv.z)), grit * 0.85);
-          sH += grit * 0.01;
-          rc *= 1.0 - 0.1 * gb;
+        if (rid == 1 || rid == 4 || rid == 6) {
+          float gb = 1.0 - smoothstep(0.0, 0.4, sFrac);                 // strongest at the base, gone by 40 % up the bed
+          float sc = mix(6.0, 14.0, smoothstep(0.0, 0.4, sFrac));        // and the grains get smaller upward
+          vec3 gv = vor(vec3(sQ, vWP.z) * sc + UA.y * 9.0);
+          float grit = gb * smoothstep(0.46, 0.3, gv.x) * step(0.15, gv.z);
+          vec3 gc = gv.z > 0.7 ? vec3(0.16, 0.15, 0.15) : gv.z > 0.45 ? vec3(0.5, 0.3, 0.22) : vec3(0.93, 0.91, 0.87);
+          gc *= 0.8 + 0.4 * smoothstep(0.46, 0.1, gv.x);                 // rounded grains: lit centres
+          rc = mix(rc * (1.0 - 0.38 * gb), gc, min(1.0, grit * 1.1));   // the coarse base reads darker and grittier
+          sH += grit * 0.025 * (0.46 - gv.x);
         }
         // a fine dark seam at each bedding plane
         if (UA.x > 0.5 && UA.x < 6.5 || UA.x > 7.5) rc *= 1.0 - 0.25 * smoothstep(0.035, 0.0, sFrac * UA.z);

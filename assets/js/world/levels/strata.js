@@ -169,7 +169,7 @@ export function create(engine) {
     if (g) for (const f of g.fossils) {
       const bury = f.f * g.full;
       if (g.t < bury - 0.35 || g.t >= bury) continue;
-      put(f, true, 1);
+      put({ ...f, unit: g.id, living: true }, true, 1);
     }
     for (const im of Object.values(fossilMeshes)) { im.instanceMatrix.needsUpdate = true; if (im.instanceColor) im.instanceColor.needsUpdate = true; im.computeBoundingSphere(); }
   }
@@ -269,16 +269,17 @@ export function create(engine) {
   function sync(S) {
     U.uNEv.value = S.events.length;
     S.events.forEach((e, i) => {
-      if (e.type === "deposit") { const u = S.units[e.unit]; U.uEvT.value[i] = 0; U.uEvA.value[i].set(u.id, u.base, u.t, u.full); }
-      else if (e.type === "tilt") { U.uEvT.value[i] = 1; U.uEvA.value[i].set(e.c, e.s, e.cx, e.cy); }
-      else if (e.type === "dyke") { U.uEvT.value[i] = 2; U.uEvA.value[i].set(e.x0, e.dx, e.dy, e.half); U.uEvB.value[i].set(e.unit, e.topAt, 0, 0); }
-      else U.uEvT.value[i] = 3;
+      if (e.type === "deposit") { const u = S.units[e.unit]; U.uEvT.value[i] = 0; U.uEvA.value[i].set(u.id, u.base, u.t, u.full); U.uEvB.value[i].set(0, 0, u.base, 0); }
+      else if (e.type === "tilt") { U.uEvT.value[i] = 1; U.uEvA.value[i].set(e.c, e.s, e.cx, e.cy); U.uEvB.value[i].set(0, 0, e.topBefore, 0); }
+      else if (e.type === "dyke") { U.uEvT.value[i] = 2; U.uEvA.value[i].set(e.x0, e.dx, e.dy, e.half); U.uEvB.value[i].set(e.unit, e.topAt, -1e9, 0); }
+      else { U.uEvT.value[i] = 3; U.uEvB.value[i].set(0, 0, e.topBefore, 0); }
     });
     S.units.forEach((u, i) => {
       U.uUnitA.value[i].set(ROCKS[u.rock].glsl, u.seed, u.full || 1, u.base || 0);
       U.uUnitTint.value[i].set(...u.tint);
       U.uDone.value[i] = mode === "date" && ch.tapped.includes(u.id) ? 1 : 0;
     });
+    U.uTop.value = S.top;
     block.scale.y = Math.max(0.05, S.top - BOTTOM);
   }
 
@@ -350,7 +351,7 @@ export function create(engine) {
     if (!h) return "";
     const u = S.units[h.unit];
     if (h.fossil) {
-      if (h.fossil.px === undefined) return `Living ${FOSSILS[h.fossil.type].name.toLowerCase()}`;
+      if (h.fossil.living) return `Living ${FOSSILS[h.fossil.type].name.toLowerCase().replace(/ (shell|bone|tooth|frond|leaf)$/, "")}`;
       return `Fossil: ${FOSSILS[h.fossil.type].name.toLowerCase()}`;
     }
     if (mode === "date") {
@@ -438,7 +439,7 @@ export function create(engine) {
     if (ch.kind === "overturned") tr.over = true;
     ch.fb = `🎉 All ${ch.need.length} in order${clean ? " with no mistakes" : ` (${ch.mistakes} mistake${ch.mistakes > 1 ? "s" : ""})`}. ${
       ch.kind === "overturned" ? "The oldest layer was on top: the stack had been turned over, so you had to work out which way was up first." :
-      ch.kind === "dyke" ? "The dyke is younger than the layers it cuts and older than the layer laid over it." :
+      ch.kind === "dyke" ? "The dyke is younger than the layers it cuts, and older than the layer laid across its worn-down top." :
       ch.kind === "tilted" ? "Even tilted, each layer is still on top of the older ones: you follow the layers along the slope." :
       ch.kind === "illawarra" ? "The coal measures at the bottom formed in Permian swamps, around 260 million years ago; the Hawkesbury Sandstone on top is about 15 million years younger." :
       "The bottom layer formed first and the top layer last."}`;
@@ -493,7 +494,7 @@ export function create(engine) {
     els.build.insertAdjacentHTML("beforeend", `<p class="hint" style="margin:12px 0 4px">Then change the rocks</p>`);
     K.slider(els.build, { label: "Tilt angle", min: -45, max: 45, step: 5, value: tiltDeg, format: (v) => `${v > 0 ? "" : v < 0 ? "−" : ""}${Math.abs(v)}°`, onInput: (v) => (tiltDeg = v) });
     const r2 = K.buttonRow(els.build);
-    els.tiltBtn = K.button(r2, "Tilt the block", () => doTilt(tiltDeg || 25));
+    els.tiltBtn = K.button(r2, "Tilt the block", () => { if (!tiltDeg) engine.toast("Set a tilt angle first."); else doTilt(tiltDeg); });
     els.erodeBtn = K.button(r2, "Wear the top away", () => doErode());
     if (lens.atLeast("ext")) {
       const r3 = K.buttonRow(els.build);
@@ -558,7 +559,8 @@ export function create(engine) {
     if (v === mode) return;
     mode = v;
     selected = null; hover = null;
-    if (mode === "date" && !ch.S) newCliff(lens.filter(C.CHALLENGES).some((k) => k.id === ch.kind) ? ch.kind : "flat");
+    const allowed = lens.filter(C.CHALLENGES).some((k) => k.id === ch.kind);
+    if (mode === "date" && (!ch.S || !allowed)) newCliff(allowed ? ch.kind : "flat");
     else frameTo(M());
     dirty = true;
     refreshPanel();
@@ -594,13 +596,13 @@ export function create(engine) {
         const q = ch.question;
         els.dateQ.insertAdjacentHTML("beforeend", `<p style="margin:10px 0 6px"><b>Bonus:</b> ${q.q}</p>`);
         const opts = document.createElement("div"); opts.className = "opts"; els.dateQ.appendChild(opts);
-        q.options.forEach((o, i) => K.button(opts, o, (_, b) => {
-          if (ch.answered) return;
-          ch.answered = true;
-          b.classList.add(i === q.answer ? "right" : "wrong");
+        const show = (i) => {
+          opts.children[i].classList.add(i === q.answer ? "right" : "wrong");
           opts.children[q.answer].classList.add("right");
           els.dateQ.insertAdjacentHTML("beforeend", `<p class="dt-fb ${i === q.answer ? "good" : "bad"}">${i === q.answer ? "✅" : "❌"} ${q.why}</p>`);
-        }));
+        };
+        q.options.forEach((o, i) => K.button(opts, o, () => { if (ch.answered !== false) return; ch.answered = i; show(i); }));
+        if (ch.answered !== false) show(ch.answered);
       }
     }
     // selected card
@@ -608,8 +610,10 @@ export function create(engine) {
       els.sel.style.display = "";
       const h2 = els.sel.querySelector("h2");
       if (selected.fossil) {
-        h2.textContent = FOSSILS[selected.fossil.type].name;
-        els.selBody.innerHTML = C.fossilCard(S, selected.fossil, band, { challenge: mode === "date" });
+        h2.textContent = (selected.fossil.living ? "Living: " : "Fossil: ") + FOSSILS[selected.fossil.type].name;
+        els.selBody.innerHTML = selected.fossil.living
+          ? `<p>${FOSSILS[selected.fossil.type].what[0].toUpperCase() + FOSSILS[selected.fossil.type].what.slice(1)}, alive (or just died) on the surface while this layer builds up. If sediment buries it quickly, its hard parts may become a fossil in this layer.</p>`
+          : C.fossilCard(S, selected.fossil, band, { challenge: mode === "date" });
       } else {
         const u = S.units[selected.unit];
         h2.textContent = mode === "date" && !S.realPlace ? `${u.kind === "dyke" ? "Dyke" : "Layer"} ${u.label}: ${u.name}` : u.kind === "layer" && mode === "build" ? `Layer ${S.layers().indexOf(u) + 1}: ${u.name}` : u.name;
@@ -628,8 +632,8 @@ export function create(engine) {
     if (k === "flat") out.push("These layers are lying flat, just as they were laid down. Nothing has disturbed them, so the law of superposition applies directly: lower means older.");
     if (k === "tilted") out.push("Earth movements tilted these layers after they formed, then erosion planed the top flat. They are still in order, oldest underneath: follow each layer along its slope.");
     if (k === "illawarra") out.push("This is the real sequence exposed in the Illawarra escarpment, from the coal measures at the base of the cliffs up to the Hawkesbury Sandstone on top. The layers are almost flat, so superposition works directly.");
-    if (k === "dyke") out.push(band === "ext" ? "A dyke of dolerite cuts across some layers. Cross-cutting relationships: a rock that cuts across others is younger than them." : "A dyke cuts across some layers. The layers it cuts had to be there first.");
-    if (k === "overturned") out.push("Earth movements can fold layers so far that they end up upside down. Look for way-up clues: pebbles and coarse grains settle first, at the original bottom of each bed, and fossils lie upside down.");
+    if (k === "dyke") out.push("A dyke of dolerite cuts across some layers. Cross-cutting relationships: a rock that cuts across others is younger than them. The top layer was laid down later on the worn-flat surface, across the dyke.");
+    if (k === "overturned") out.push("Earth movements can fold layers so far that they end up upside down. Look for a way-up clue: these sand, gravel and ash beds are normally graded, so pebbles and coarse grains mark the original bottom of each bed.");
     if (ch.done || ch.revealed) {
       const order = ch.need.map((id) => (S.realPlace ? S.units[id].name : S.units[id].label));
       out.push(`True order, oldest to youngest: <b>${order.join(" → ")}</b>.`);
@@ -677,14 +681,14 @@ export function create(engine) {
       if (!h) { selected = null; refreshPanel(); return true; }
       const S = M();
       if (mode === "date") {
-        if (h.fossil && h.fossil.px !== undefined) selected = { fossil: h.fossil, unit: h.unit };
+        if (h.fossil && !h.fossil.living) selected = { fossil: h.fossil, unit: h.unit };
         else selected = { unit: h.unit };
         if (h.unit === 0 && !ch.done) { ch.fb = C.wrongTap(S, 0, ch.need[ch.tapped.length], lens.band); ch.fbKind = ""; }
         else if (h.unit > 0) tap(h.unit);
         refreshPanel();
         return true;
       }
-      if (h.fossil) { selected = { fossil: h.fossil, unit: h.unit }; if (h.fossil.px !== undefined) tr.fossil = true; }
+      if (h.fossil) { selected = { fossil: h.fossil, unit: h.unit }; if (!h.fossil.living) tr.fossil = true; }
       else selected = { unit: h.unit };
       // missions: the oldest layer (the first one laid down)
       const first = S.layers()[0];
@@ -714,7 +718,7 @@ export function create(engine) {
       panelRoot.remove();
       panelBuilt = false;
       buildPanel();
-      if (!lens.filter(C.CHALLENGES).some((k) => k.id === ch.kind) && mode === "date") newCliff("flat");
+      if (!lens.filter(C.CHALLENGES).some((k) => k.id === ch.kind)) { if (mode === "date") newCliff("flat"); else { ch.S = null; ch.kind = "flat"; } }
       parent?.appendChild(panelRoot);
       refreshPanel();
     },

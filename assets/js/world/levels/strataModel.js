@@ -61,13 +61,21 @@ export const FOSSILS = {
   shell:       { name: "Clam shell", what: "the shell of a bivalve (clam)" },
 };
 
+// Earliest (first) and latest (last) ages in Ma at which each fossil type is allowed, so a pool never offers an organism
+// outside its known range (e.g. flowering-plant leaves only after ~125 Ma; dinosaurs from ~233 Ma; trilobites gone by 252 Ma).
+export const RANGES = {
+  trilobite: [521, 252], ammonite: [410, 66], glossopteris: [299, 201], dinoBone: [233, 66], leaf: [125, 0],
+  mammalBone: [66, 0], sharkTooth: [400, 0], fern: [385, 0], fish: [420, 0], brachiopod: [530, 0], shell: [500, 0],
+};
+export const fossilAllowed = (type, ma) => { const r = RANGES[type]; return !r || (ma <= r[0] && ma >= r[1]); };
+
 // Simplified time periods with real boundary ages (International Chronostratigraphic Chart v2023/09) and the fossils
 // that fit each habitat then. Lists are representative, not complete.
 export const PERIODS = [
   { name: "Cambrian", from: 539, to: 485, sea: ["trilobite", "brachiopod"], land: [] },
   { name: "Ordovician and Silurian", from: 485, to: 419, sea: ["trilobite", "brachiopod"], land: [] },
   { name: "Devonian", from: 419, to: 359, sea: ["brachiopod", "fish", "trilobite"], land: ["fish", "fern"] },
-  { name: "Carboniferous", from: 359, to: 299, sea: ["brachiopod", "fish"], land: ["fern"] },
+  { name: "Carboniferous", from: 359, to: 299, sea: ["brachiopod", "fish", "trilobite"], land: ["fern"] },
   { name: "Permian", from: 299, to: 252, sea: ["brachiopod", "trilobite"], land: ["glossopteris", "fern"] },
   { name: "Triassic", from: 252, to: 201, sea: ["ammonite", "fish"], land: ["fern", "fish"] },
   { name: "Jurassic", from: 201, to: 145, sea: ["ammonite", "fish"], land: ["dinoBone", "fern"] },
@@ -89,7 +97,7 @@ const LETTERS = "ABCDEFGHJKLMNPQRSTUVWXYZ";
  *   units[i] = { id, kind: "basement" | "layer" | "dyke", rock, env?, name, base?, t?, event, ma?, fossils[], tint[3], seed, label? }
  *   events[j] = { type, ... , unit? }
  */
-export function createStrata({ seed = 1, startMa = 520 } = {}) {
+export function createStrata({ seed = 1, startMa = 340 } = {}) {
   const R = rng(seed);
   const S = {
     seed, R,
@@ -118,7 +126,7 @@ export function createStrata({ seed = 1, startMa = 520 } = {}) {
     S.events.push({ type: "deposit", unit: u.id });
     // fossils: organisms of this period that lived in this habitat, at random heights inside the layer, along the front face
     const per = periodAt(ma);
-    const pool = o.fossilPool || (env.habitat === "sea" ? per.sea : env.habitat === "land" ? per.land : []);
+    const pool = (o.fossilPool || (env.habitat === "sea" ? per.sea : env.habitat === "land" ? per.land : [])).filter((t) => o.fossilPool || fossilAllowed(t, ma));
     const n = o.fossilCount ?? (pool.length ? (env.id === "flood" ? (R() < 0.5 ? 1 : 0) : 1 + Math.floor(R() * 2.2)) : 0);
     for (let k = 0; k < n && pool.length; k++) {
       u.fossils.push({ type: pool[Math.floor(R() * pool.length)], x: -W / 2 + 1.2 + R() * (W - 2.4), f: 0.25 + R() * 0.5, rot: R() * Math.PI * 2, id: `${u.id}-${k}` });
@@ -191,21 +199,27 @@ export function createStrata({ seed = 1, startMa = 520 } = {}) {
   S.classify = (x, y, out = {}) => {
     if (y > S.top + 1e-6) { out.unit = -1; return out; }
     let qx = x, qy = y;
+    let ceil = S.top;                       // the land surface just after the event being undone, in that time's coordinates
     for (let i = S.events.length - 1; i >= 0; i--) {
       const e = S.events[i];
+      // above the surface at that time: the rock here was worn away (or never existed), so whatever fills this spot now is
+      // not part of the sequence. It only happens when later folding brings such a spot into the block: show it as unit 0.
+      if (qy > ceil + 1e-6) break;
       if (e.type === "deposit") {
         const u = S.units[e.unit];
         if (qy >= u.base && qy <= u.base + u.t && u.t > 0) { out.unit = u.id; out.qx = qx; out.qy = qy; out.frac = (qy - u.base) / u.full; return out; }
+        ceil = u.base;
       } else if (e.type === "tilt") {
         // undo the rotation: q = R(−θ)(q − c) + c
         const px = qx - e.cx, py = qy - e.cy;
         qx = e.c * px + e.s * py + e.cx;
         qy = -e.s * px + e.c * py + e.cy;
+        ceil = e.topBefore;
       } else if (e.type === "dyke") {
         const px = qx - e.x0, py = qy;
         const dist = Math.abs(px * e.dy - py * e.dx);
-        if (dist < e.half && qy <= e.topAt) { out.unit = e.unit; out.qx = qx; out.qy = qy; out.frac = 0; return out; }
-      }
+        if (dist < e.half && qy <= e.topAt) { out.unit = e.unit; out.qx = qx; out.qy = qy; out.frac = dist / e.half; return out; }
+      } else if (e.type === "erode") ceil = e.topBefore;
     }
     out.unit = 0; out.qx = qx; out.qy = qy; out.frac = 0;
     return out;
@@ -304,12 +318,16 @@ export function createStrata({ seed = 1, startMa = 520 } = {}) {
 export function makeCliff(kind = "flat", seed = 1) {
   if (kind === "illawarra") return illawarra();
   const R = rng(seed * 7919 + 13);
-  const S = createStrata({ seed: seed * 31 + 7, startMa: 300 + Math.floor(R() * 200) });
+  const S = createStrata({ seed: seed * 31 + 7, startMa: 300 + Math.floor(R() * 40) });
   const n = kind === "flat" ? 4 + (R() < 0.5 ? 1 : 0) : 5;
   const used = new Set();
+  // overturned cliffs use only beds that are normally graded (coarse at the base, fining upward), the way-up clue students read
+  const GRADED = ["river", "flood", "volcano"];
+  let prev = null;
   for (let i = 0; i < n; i++) {
     let env;
-    do env = ENVS[Math.floor(R() * ENVS.length)]; while (used.has(env.id) || (i === 0 && env.id === "volcano"));   // every layer a different rock, so they are easy to tell apart
+    if (kind === "overturned") { do env = ENV[GRADED[Math.floor(R() * GRADED.length)]]; while (env.id === prev); prev = env.id; }
+    else { do env = ENVS[Math.floor(R() * ENVS.length)]; while (used.has(env.id) || (i === 0 && env.id === "volcano")); }   // every layer a different rock, so they are easy to tell apart
     used.add(env.id);
     S.deposit(env.id, { grow: false, thickness: 1.1 + R() * 0.9, fossilCount: env.habitat === "ash" ? 0 : 1 + (R() < 0.4 ? 1 : 0) });
   }
@@ -321,6 +339,7 @@ export function makeCliff(kind = "flat", seed = 1) {
   }
   if (kind === "dyke") {
     S.intrude(-3 + R() * 6, (R() - 0.5) * 30, 0.8);
+    S.erode(0.3);                                                  // the land is worn flat, cutting off the top of the dyke
     S.deposit(ENVS[Math.floor(R() * 3)].id, { grow: false, thickness: 1.2, fossilCount: 1 });   // a layer laid over the dyke: younger than it
   }
   // random letters (not in order)
@@ -341,6 +360,8 @@ export function illawarra() {
   const S = createStrata({ seed: 2515 });
   // the real rocks beneath the coal measures are older Permian sediments, then (kilometres down) Lachlan Fold Belt basement
   S.units[0].name = "Older rocks beneath (Shoalhaven Group and deeper basement)";
+  S.units[0].rock = "shale";
+  S.units[0].tint = [0.95, 0.93, 0.9];
   S.units[0].info = "Below the coal measures lie older Permian sea-floor rocks, and kilometres further down the folded basement of the Lachlan Fold Belt. Drawn here as a simple grey-pink base.";
   const L = [
     { name: "Illawarra Coal Measures", rock: "coalMeasures", t: 1.8, ma: 259, pool: ["glossopteris", "fern"], n: 3, tint: [1, 1, 1],
