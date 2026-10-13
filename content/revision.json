@@ -263,7 +263,7 @@
     "superposition",
     "relative-dating"
    ],
-   "q": "Sand and gravel beds are usually graded: the coarse grains settle first. Which is a clue that such a bed is upside down?",
+   "q": "A bed of sand and pebbles originally had its coarse grains at the base and finer grains above. Which observation suggests it has been turned upside down?",
    "options": [
     "The layer is very thick",
     "The layer contains fossils",
@@ -271,7 +271,7 @@
     "The layer is sandstone"
    ],
    "answer": 2,
-   "why": "In a normally graded bed coarse grains mark the original bottom, so coarse grains at the top suggest the bed has been overturned. Geologists check several clues, because some beds are not graded."
+   "why": "If a bed started with coarse grains at its base, finding them at the top suggests it has been overturned. Geologists check several clues, because not every bed is graded this way."
   },
   {
    "id": "dt017",

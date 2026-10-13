@@ -41,7 +41,7 @@ export function narrative(S, band, ctx = {}) {
     out.push(`The block has ${layers.length} layer${layers.length > 1 ? "s" : ""} on the basement rock. Layer 1 was laid down first, so it is the oldest; layer ${layers.length} is the youngest.`);
   }
   // orientation comes from all the tilts added together, layer by layer (two 45° tilts and a 90° one can overturn a stack)
-  const tilted = layers.filter((u) => Math.abs(S.angleOf(u.id)) > 1e-3);
+  const tilted = layers.filter((u) => Math.abs(S.angleOf(u.id)) > 0.02);
   const over = layers.filter((u) => S.isOverturned(u.id));
   const upright = layers.filter((u) => !S.isOverturned(u.id));
   const later = over.length && upright.some((u) => u.event > Math.max(...over.map((o) => o.event)));
@@ -51,7 +51,12 @@ export function narrative(S, band, ctx = {}) {
     + (later ? " Layers laid down after the overturning are the right way up." : ""));
   else if (tilted.length) {
     const deg = Math.round(Math.abs(S.angleOf(tilted[0].id)) * 180 / Math.PI);
-    out.push(`${tilted.length === layers.length ? "The layers have" : "The older layers have"} been <b>tilted</b> about ${deg}° and the top worn flat. Older layers are still underneath younger ones: read the order along the layers, following the slope, not straight up the cliff edge.`);
+    const who = tilted.length === layers.length ? "The layers have" : "The older layers have";
+    if (deg >= 80) out.push(`${who} been tilted until they stand on end (about ${deg}°) and the top was worn flat. Now the order runs sideways: the oldest layer is at the side that used to be the bottom. Without way-up clues you can't tell which side that is.`);
+    else out.push(`${who} been <b>tilted</b> about ${deg}° and the top worn flat. Older layers are still underneath younger ones: read the order along the layers, following the slope, not straight up the cliff edge.`);
+  }
+  if (!over.length && !tilted.length && S.hasType("tilt") && layers.length) {
+    out.push("The layers were tipped over and back again, so they are flat and the right way up once more: lower means older.");
   }
   if (S.hasType("dyke")) out.push(ext
     ? "A <b>dyke</b> of igneous rock cuts across some layers. By cross-cutting relationships it is younger than every layer it cuts. A layer laid across its worn-down top is younger than the dyke."
@@ -105,7 +110,7 @@ export function wrongTap(S, tapped, want, band) {
   const ext = band === "ext";
   const t = S.units[tapped], w = S.units[want];
   const L = (u) => (S.realPlace ? u.name : u.kind === "dyke" ? `the dyke (${u.label})` : `layer ${u.label}`);
-  if (tapped === 0) return "The basement rock is older than all the layers, but leave it out: order only the lettered rocks.";
+  if (tapped === 0) return "Leave out the unlettered rock at the bottom: order only the lettered rocks.";
   if (t.kind === "dyke" || w.kind === "dyke") {
     if (t.kind === "dyke") return `Not yet. The dyke cuts through ${L(w)}, so ${L(w)} must already have been there: it is older than the dyke.`;
     return `Not yet. ${L(t)} was laid down across the worn-down top of the dyke and is not cut by it, so it formed after the dyke. Which rock comes before it?`;

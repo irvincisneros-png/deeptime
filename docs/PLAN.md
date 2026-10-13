@@ -6,7 +6,7 @@
 
 | # | Station | Code | Level | Status |
 |---|---|---|---|---|
-| 1 | Rock layers: build strata, disturb them, date cliffs (incl. Illawarra escarpment) | 7.3.8 | `strata` | ✅ 2026-10-14 built, browser-checked, Codex review |
+| 1 | Rock layers: build strata, disturb them, date cliffs (incl. Illawarra escarpment) | 7.3.8 | `strata` | ✅ 2026-10-14 built, browser-checked, Codex 2 rounds fixed |
 | 2 | Fossils: model fossil formation, fossils at different times | 7.3.7 | — | Planned (reuse `strataFossils.js`, periods table) |
 | 3 | Rock cycle | 7.3.6 | — | Planned |
 | 4 | Minerals and rocks: observable properties (hardness, streak, lustre, cleavage) | 7.3.5 | — | Planned |

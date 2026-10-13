@@ -172,6 +172,8 @@ export function create(engine) {
       put({ ...f, unit: g.id, living: true }, true, 1);
     }
     for (const im of Object.values(fossilMeshes)) { im.instanceMatrix.needsUpdate = true; if (im.instanceColor) im.instanceColor.needsUpdate = true; im.computeBoundingSphere(); }
+    // a living organism that was selected has now been buried: drop the stale "alive" card
+    if (selected?.fossil?.living && !Object.values(fossilMeshes).some((im) => im.userData.recs.some((r) => r.living && r.id === selected.fossil.id))) { selected = null; refreshPanel(); }
   }
 
   // ---------- deposition scene: water, falling sediment, swamp plants ----------
@@ -587,7 +589,7 @@ export function create(engine) {
       const k = C.CHALLENGES.find((c) => c.id === ch.kind);
       els.dateIntro.innerHTML = k.intro;
       els.dateProg.textContent = ch.revealed ? "Answer shown." : `Placed ${ch.tapped.length} of ${ch.need.length}${ch.mistakes ? ` · mistakes: ${ch.mistakes}` : ""}`;
-      els.dateFb.innerHTML = ch.fb || "Tap the oldest rock first. Leave out the pink-grey basement rock at the very bottom.";
+      els.dateFb.innerHTML = ch.fb || "Tap the oldest rock first. Leave out the unlettered rock at the very bottom.";
       els.dateFb.className = `dt-fb ${ch.fbKind}`;
       els.revealBtn.disabled = ch.done || ch.revealed;
       // follow-up fossil question

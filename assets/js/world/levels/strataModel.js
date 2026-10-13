@@ -61,11 +61,12 @@ export const FOSSILS = {
   shell:       { name: "Clam shell", what: "the shell of a bivalve (clam)" },
 };
 
-// Earliest (first) and latest (last) ages in Ma at which each fossil type is allowed, so a pool never offers an organism
-// outside its known range (e.g. flowering-plant leaves only after ~125 Ma; dinosaurs from ~233 Ma; trilobites gone by 252 Ma).
+// Outer limits (oldest, youngest; Ma) of each fossil group's known range, used only to stop a period pool offering an
+// organism outside it (e.g. flowering-plant leaves only after ~125 Ma; dinosaurs ~233 to 66 Ma; trilobites gone by 252 Ma).
+// The period pools below stay a small representative choice inside these limits.
 export const RANGES = {
   trilobite: [521, 252], ammonite: [410, 66], glossopteris: [299, 201], dinoBone: [233, 66], leaf: [125, 0],
-  mammalBone: [66, 0], sharkTooth: [400, 0], fern: [385, 0], fish: [420, 0], brachiopod: [530, 0], shell: [500, 0],
+  mammalBone: [225, 0], sharkTooth: [400, 0], fern: [385, 0], fish: [530, 0], brachiopod: [530, 0], shell: [510, 0],
 };
 export const fossilAllowed = (type, ma) => { const r = RANGES[type]; return !r || (ma <= r[0] && ma >= r[1]); };
 
@@ -261,7 +262,7 @@ export function createStrata({ seed = 1, startMa = 340 } = {}) {
   S.angleOf = (u) => {
     let a = 0;
     for (let i = S.units[u].event + 1; i < S.events.length; i++) if (S.events[i].type === "tilt") a += (S.events[i].deg * Math.PI) / 180;
-    return a;
+    return Math.atan2(Math.sin(a), Math.cos(a));   // net rotation in (−π, π]: two overturns cancel out
   };
   S.isOverturned = (u) => Math.abs(Math.cos(S.angleOf(u))) > 1e-3 && Math.cos(S.angleOf(u)) < 0;
 
