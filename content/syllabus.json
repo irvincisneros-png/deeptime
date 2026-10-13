@@ -1,0 +1,159 @@
+{
+ "source_notes": [
+  {
+   "syllabus": "Science 7–10 (2023)",
+   "url": "https://curriculum.nsw.edu.au/learning-areas/science/science-7-10-2023/content/stage-4/fafa172269",
+   "retrieved": "2026-10-14",
+   "status": "current (implemented from 2026)",
+   "method": "Content dot point titles extracted verbatim from the NSW Curriculum website's embedded page data (__NEXT_DATA__) for the Stage 4 Change focus area, content group 'Geological change' (outcome SC4-CHG-01). Working scientifically outcomes are not content dot points and are not included."
+  },
+  {
+   "syllabus": "School sequence",
+   "url": "Year-8-Science/change/content.jsx (Section 7.3 Geological Change)",
+   "retrieved": "2026-10-14",
+   "note": "school_code = the school's Year 8 numbering (7.3.1 to 7.3.9), matched to the official dot points by text, in the same order."
+  }
+ ],
+ "bands": [
+  {
+   "id": "y8",
+   "label": "Year 8 (Stage 4)"
+  },
+  {
+   "id": "ext",
+   "label": "Extension (beyond Year 8)"
+  }
+ ],
+ "extra_topic_tags": [],
+ "dotpoints": [
+  {
+   "id": "s4-chg-geo-1",
+   "band": "y8",
+   "syllabus": "Science 7–10 (2023)",
+   "outcome": "SC4-CHG-01",
+   "focus_area": "Change",
+   "content_group": "Geological change",
+   "text": "Describe the processes associated with the movement of tectonic plates",
+   "topics": [
+    "plate-tectonics"
+   ],
+   "school_code": "Y8 7.3.1",
+   "source_url": "https://curriculum.nsw.edu.au/learning-areas/science/science-7-10-2023/content/stage-4/fafa172269"
+  },
+  {
+   "id": "s4-chg-geo-2",
+   "band": "y8",
+   "syllabus": "Science 7–10 (2023)",
+   "outcome": "SC4-CHG-01",
+   "focus_area": "Change",
+   "content_group": "Geological change",
+   "text": "Identify the evidence used to develop the theory of plate tectonics",
+   "topics": [
+    "plate-tectonics"
+   ],
+   "school_code": "Y8 7.3.2",
+   "source_url": "https://curriculum.nsw.edu.au/learning-areas/science/science-7-10-2023/content/stage-4/fafa172269"
+  },
+  {
+   "id": "s4-chg-geo-3",
+   "band": "y8",
+   "syllabus": "Science 7–10 (2023)",
+   "outcome": "SC4-CHG-01",
+   "focus_area": "Change",
+   "content_group": "Geological change",
+   "text": "Identify that earthquakes and volcanoes are natural phenomena that provide evidence of geological changes in the Earth’s crust and surface",
+   "topics": [
+    "earthquakes-volcanoes"
+   ],
+   "school_code": "Y8 7.3.3",
+   "source_url": "https://curriculum.nsw.edu.au/learning-areas/science/science-7-10-2023/content/stage-4/fafa172269"
+  },
+  {
+   "id": "s4-chg-geo-4",
+   "band": "y8",
+   "syllabus": "Science 7–10 (2023)",
+   "outcome": "SC4-CHG-01",
+   "focus_area": "Change",
+   "content_group": "Geological change",
+   "text": "Describe how Aboriginal and/or Aboriginal and Torres Strait Islander Cultural accounts provide evidence of earthquakes and volcanoes on Country or under the sea",
+   "topics": [
+    "first-nations",
+    "earthquakes-volcanoes"
+   ],
+   "school_code": "Y8 7.3.4",
+   "source_url": "https://curriculum.nsw.edu.au/learning-areas/science/science-7-10-2023/content/stage-4/fafa172269"
+  },
+  {
+   "id": "s4-chg-geo-5",
+   "band": "y8",
+   "syllabus": "Science 7–10 (2023)",
+   "outcome": "SC4-CHG-01",
+   "focus_area": "Change",
+   "content_group": "Geological change",
+   "text": "Conduct investigations or simulations to compare the observable properties of different types of minerals and rocks",
+   "topics": [
+    "minerals-rocks"
+   ],
+   "school_code": "Y8 7.3.5",
+   "source_url": "https://curriculum.nsw.edu.au/learning-areas/science/science-7-10-2023/content/stage-4/fafa172269"
+  },
+  {
+   "id": "s4-chg-geo-6",
+   "band": "y8",
+   "syllabus": "Science 7–10 (2023)",
+   "outcome": "SC4-CHG-01",
+   "focus_area": "Change",
+   "content_group": "Geological change",
+   "text": "Use the rock cycle to explain the geological processes that lead to the formation and transformation of different types of rocks",
+   "topics": [
+    "rock-cycle",
+    "sedimentary-rocks"
+   ],
+   "school_code": "Y8 7.3.6",
+   "source_url": "https://curriculum.nsw.edu.au/learning-areas/science/science-7-10-2023/content/stage-4/fafa172269"
+  },
+  {
+   "id": "s4-chg-geo-7",
+   "band": "y8",
+   "syllabus": "Science 7–10 (2023)",
+   "outcome": "SC4-CHG-01",
+   "focus_area": "Change",
+   "content_group": "Geological change",
+   "text": "Model the formation of fossils and explain how fossils show evidence that different organisms existed at different times in the past",
+   "topics": [
+    "fossils"
+   ],
+   "school_code": "Y8 7.3.7",
+   "source_url": "https://curriculum.nsw.edu.au/learning-areas/science/science-7-10-2023/content/stage-4/fafa172269"
+  },
+  {
+   "id": "s4-chg-geo-8",
+   "band": "y8",
+   "syllabus": "Science 7–10 (2023)",
+   "outcome": "SC4-CHG-01",
+   "focus_area": "Change",
+   "content_group": "Geological change",
+   "text": "Recognise that the law of superposition allows scientists to determine the relative age of rock strata",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "school_code": "Y8 7.3.8",
+   "source_url": "https://curriculum.nsw.edu.au/learning-areas/science/science-7-10-2023/content/stage-4/fafa172269"
+  },
+  {
+   "id": "s4-chg-geo-9",
+   "band": "y8",
+   "syllabus": "Science 7–10 (2023)",
+   "outcome": "SC4-CHG-01",
+   "focus_area": "Change",
+   "content_group": "Geological change",
+   "text": "Describe the elemental composition of the Earth and one or more other planets",
+   "topics": [
+    "earth-composition"
+   ],
+   "school_code": "Y8 7.3.9",
+   "source_url": "https://curriculum.nsw.edu.au/learning-areas/science/science-7-10-2023/content/stage-4/fafa172269"
+  }
+ ]
+}

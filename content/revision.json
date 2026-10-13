@@ -1,0 +1,413 @@
+{
+ "generated": "hand-written 2026-10-14 (station 1)",
+ "items": [
+  {
+   "id": "dt001",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "What does the law of superposition say about undisturbed rock layers?",
+   "options": [
+    "Lower layers are younger than the layers above",
+    "Lower layers are older than the layers above them",
+    "All layers are the same age",
+    "Thicker layers are always older"
+   ],
+   "answer": 1,
+   "why": "Each layer is laid down on top of older ones, so in undisturbed layers the lower layers are older."
+  },
+  {
+   "id": "dt002",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "In a cliff of flat layers, where is the youngest layer?",
+   "options": [
+    "At the bottom",
+    "At the top",
+    "In the middle",
+    "Wherever the most fossils are"
+   ],
+   "answer": 1,
+   "why": "The top layer was laid down last, so it is the youngest."
+  },
+  {
+   "id": "dt003",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "Layers W (top), X, Y and Z (bottom) have not been disturbed. Which is the oldest?",
+   "options": [
+    "W",
+    "X",
+    "Z",
+    "Y"
+   ],
+   "answer": 2,
+   "why": "Z is at the bottom, so it formed first."
+  },
+  {
+   "id": "dt004",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "What is relative dating?",
+   "options": [
+    "Putting rocks or events in order from oldest to youngest",
+    "Finding the exact age of a rock in years",
+    "Measuring how thick a layer is",
+    "Naming the minerals in a rock"
+   ],
+   "answer": 0,
+   "why": "Relative dating says which is older or younger, not how many years old."
+  },
+  {
+   "id": "dt005",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "A fossil trilobite is found two layers below a fossil fern in undisturbed rock. What can you say?",
+   "options": [
+    "The fern lived before the trilobite",
+    "They lived at the same time",
+    "Nothing at all",
+    "The trilobite lived before the fern"
+   ],
+   "answer": 3,
+   "why": "The trilobite's layer is lower, so it is older."
+  },
+  {
+   "id": "dt006",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "Why must the layers be undisturbed for the simple rule 'lower = older' to work?",
+   "options": [
+    "Disturbed layers never have fossils",
+    "Disturbed layers are made of granite",
+    "Earth movements can tilt, fold or flip layers",
+    "Disturbed layers dissolve in water"
+   ],
+   "answer": 2,
+   "why": "Folding can turn a stack upside down, putting the oldest layer on top."
+  },
+  {
+   "id": "dt007",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "Which type of rock forms in layers and is used most with the law of superposition?",
+   "options": [
+    "Granite",
+    "Marble",
+    "Sedimentary rock",
+    "Basalt from deep underground"
+   ],
+   "answer": 2,
+   "why": "Sediment settles in layers that harden into sedimentary rock."
+  },
+  {
+   "id": "dt008",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "A layer of sandstone is much thicker than the shale above it. Which is true?",
+   "options": [
+    "The sandstone is older because it is thicker",
+    "The shale is older because it is thinner",
+    "Thickness shows they are the same age",
+    "The sandstone is older because it is lower"
+   ],
+   "answer": 3,
+   "why": "Position, not thickness, gives relative age."
+  },
+  {
+   "id": "dt009",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "Who first described the law of superposition, in 1669?",
+   "options": [
+    "Charles Darwin",
+    "Alfred Wegener",
+    "Marie Curie",
+    "Nicolas Steno"
+   ],
+   "answer": 3,
+   "why": "The Danish scientist Nicolas Steno described it in 1669."
+  },
+  {
+   "id": "dt010",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "Sediment settling on a sea floor is buried by more sediment. Which statement is right?",
+   "options": [
+    "The buried sediment was there first",
+    "The new sediment is older",
+    "Both formed at exactly the same time",
+    "The sea floor is youngest"
+   ],
+   "answer": 0,
+   "why": "Whatever is underneath had to be there before the next layer could cover it."
+  },
+  {
+   "id": "dt011",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "Layers that were tilted after they formed are still in order. How do you read them?",
+   "options": [
+    "The highest point of the cliff is always oldest",
+    "Follow the layers along the slope: each one lies on top of an older one",
+    "Tilted layers can't be dated at all",
+    "The steepest layer is oldest"
+   ],
+   "answer": 1,
+   "why": "Tilting doesn't change which layer is on top of which."
+  },
+  {
+   "id": "dt012",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "What does relative dating NOT tell you?",
+   "options": [
+    "Which layer is older",
+    "How many years ago a layer formed",
+    "Which layer is younger",
+    "The order the layers formed in"
+   ],
+   "answer": 1,
+   "why": "For ages in years you need absolute (radiometric) dating."
+  },
+  {
+   "id": "dt013",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "In the Illawarra escarpment, the coal measures are at the bottom and the Hawkesbury Sandstone is at the top. Which formed first?",
+   "options": [
+    "The Hawkesbury Sandstone",
+    "Both at the same time",
+    "You can't tell from the cliff",
+    "The coal measures"
+   ],
+   "answer": 3,
+   "why": "The layers are almost flat, so the bottom (coal measures) formed first."
+  },
+  {
+   "id": "dt014",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "Why can each rock layer tell us about a different time in the past?",
+   "options": [
+    "All layers formed in one big flood",
+    "Each layer was laid down at a different time, burying what lived then",
+    "Layers move around underground and mix",
+    "Rock layers are made by plants growing"
+   ],
+   "answer": 1,
+   "why": "Each layer records the time and place it was laid down, including fossils of life at that time."
+  },
+  {
+   "id": "dt015",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "A geologist logs a cliff from the bottom up. Why start at the bottom?",
+   "options": [
+    "Because in undisturbed layers that is the order they formed in",
+    "Because the bottom is easiest to reach",
+    "Because the top layers have no rock",
+    "Because fossils are only at the bottom"
+   ],
+   "answer": 0,
+   "why": "Reading upward follows the order of deposition."
+  },
+  {
+   "id": "dt016",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "Which is a clue that a layer is upside down?",
+   "options": [
+    "The layer is very thick",
+    "The layer contains fossils",
+    "Pebbles and coarse grains are at the top of the layer instead of the bottom",
+    "The layer is sandstone"
+   ],
+   "answer": 2,
+   "why": "Coarse grains settle first, so they mark the original bottom of a layer (graded bedding)."
+  },
+  {
+   "id": "dt017",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "Layer B is above layer A and below layer C, and nothing has disturbed them. Put them oldest to youngest.",
+   "options": [
+    "A, B, C",
+    "C, B, A",
+    "B, A, C",
+    "A, C, B"
+   ],
+   "answer": 0,
+   "why": "A is at the bottom, then B, then C on top."
+  },
+  {
+   "id": "dt018",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "Fossils of the same kind are found in a layer near the bottom of one cliff only. What does this suggest?",
+   "options": [
+    "That organism lived most recently",
+    "That organism is still alive today",
+    "Nothing: fossils move between layers",
+    "That organism lived early in the time these rocks record"
+   ],
+   "answer": 3,
+   "why": "Lower layers are older, so the organism lived early in that record."
+  },
+  {
+   "id": "dt019",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "Volcanic ash falls on a lake and becomes a layer. Later, mud covers it. Which is older?",
+   "options": [
+    "The mud layer",
+    "They are the same age",
+    "The ash layer",
+    "The lake water"
+   ],
+   "answer": 2,
+   "why": "The ash was there first and was covered by mud later."
+  },
+  {
+   "id": "dt020",
+   "band": "y8",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "Which best describes 'strata'?",
+   "options": [
+    "Types of fossils",
+    "Volcanic eruptions",
+    "Minerals in granite",
+    "Layers of rock"
+   ],
+   "answer": 3,
+   "why": "Strata (singular: stratum) are layers of rock."
+  },
+  {
+   "id": "dt021",
+   "band": "ext",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "A dyke cuts through layers 1 to 4 but not layer 5 on top. Which is true?",
+   "options": [
+    "The dyke is older than all the layers",
+    "The dyke is younger than all the layers",
+    "The dyke is the same age as layer 1",
+    "The dyke is younger than layers 1 to 4 and older than layer 5"
+   ],
+   "answer": 3,
+   "why": "Cross-cutting relationships: a rock that cuts others is younger than them."
+  },
+  {
+   "id": "dt022",
+   "band": "ext",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "How do geologists find a layer's age in years?",
+   "options": [
+    "Counting the number of layers",
+    "Radiometric dating of minerals such as zircon in volcanic ash",
+    "Measuring the layer's thickness",
+    "Using the law of superposition alone"
+   ],
+   "answer": 1,
+   "why": "Radioactive atoms decay at known rates, giving absolute ages."
+  },
+  {
+   "id": "dt023",
+   "band": "ext",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "What does an erosion surface between two layers (an unconformity) mean?",
+   "options": [
+    "The layers formed at the same time",
+    "The lower layer is younger",
+    "Some time is missing from the rock record there",
+    "A dyke was intruded"
+   ],
+   "answer": 2,
+   "why": "Rock was worn away before the next layer was laid down, so there is a time gap."
+  },
+  {
+   "id": "dt024",
+   "band": "ext",
+   "topics": [
+    "superposition",
+    "relative-dating"
+   ],
+   "q": "What is the principle of original horizontality?",
+   "options": [
+    "All layers are tilted when they form",
+    "Sediment is laid down in roughly flat layers, so tilted layers were moved later",
+    "Only igneous rocks form flat layers",
+    "Layers always stay flat forever"
+   ],
+   "answer": 1,
+   "why": "Steno also noticed that sediment settles flat; tilting comes afterwards."
+  }
+ ]
+}
