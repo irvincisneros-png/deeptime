@@ -4,7 +4,7 @@ Paste below the line into a new Claude Code session opened in `~/Documents/Local
 
 ---
 
-You're continuing **DeepTime**, a 3D simulator for NSW **Year 8 Geological change** (Change focus area, SC4-CHG-01, school codes Y8 7.3.1–7.3.9). Work in `deeptime/`, branch `main`. Station 1 (7.3.8 law of superposition, level `strata`) is done; the owner wants the whole topic eventually.
+You're continuing **DeepTime**, a 3D simulator for NSW **Year 8 Geological change** (Change focus area, SC4-CHG-01, school codes Y8 7.3.1–7.3.9). Work in `deeptime/`, branch `main`, repo `irvincisneros-png/deeptime` (public, live on Pages at https://irvincisneros-png.github.io/deeptime/; every push to main goes to students). Station 1 (7.3.8 law of superposition, level `strata`) is done; the owner wants the whole topic eventually.
 
 ## Read first
 1. `deeptime/docs/PLAN.md` (stations, status, follow-ups) and `deeptime/README.md`.

@@ -17,7 +17,7 @@
 | 0 | Landscape hub (home) linking the stations | — | — | Planned; until then `strata` is the home level |
 
 ## Follow-ups
-- Repo not yet on GitHub (ask the owner before creating a public repo / Pages).
+- Live (public repo + Pages, 2026-10-14): https://irvincisneros-png.github.io/deeptime/. Every push to main goes to students: verify first. Ask before adding to science-sim-hub.
 - Real-device check (Chromebooks, phones).
 - Fossils are face-on on the cliff and 10 to 20 times life size (noted on the page).
 - Build mode erosion after a tilt can remove several layers (the block is planed down to the lowest point of the tilted top).
